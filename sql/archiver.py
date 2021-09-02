@@ -289,6 +289,17 @@ def archive(archive_id):
         "sleep": sleep
     }
 
+    args_file = {
+        "no-version-check": True,
+        "source": source,
+        "where": condition,
+        "progress": 10000,
+        "statistics": True,
+        "charset": 'utf8',
+        "limit": 100000,
+        "txn-size": 100000,
+        "sleep": sleep
+    }
     # 归档到目标实例
     if mode == 'dest':
         d_ins = archive_info.dest_instance
@@ -310,7 +321,8 @@ def archive(archive_id):
     elif mode == 'file':
         output_directory = os.path.join(settings.BASE_DIR, 'downloads/archiver')
         os.makedirs(output_directory, exist_ok=True)
-        args['file'] = f'{output_directory}/{s_ins.instance_name}-{src_db_name}-{src_table_name}.txt'
+        args_file['file'] = f'{output_directory}/{s_ins.instance_name}-{src_db_name}-{src_table_name}.txt'
+        args = args_file
         if no_delete:
             args['no-delete'] = True
     elif mode == 'purge':
