@@ -266,13 +266,14 @@ def archive(archive_id):
     mode = archive_info.mode
 
     # 获取归档表的字符集信息
-    s_engine = get_engine(s_ins)
-    s_db = s_engine.schema_object.databases[src_db_name]
-    s_tb = s_db.tables[src_table_name]
-    s_charset = s_tb.options['charset'].value
-    if s_charset is None:
-        s_charset = s_db.options['charset'].value
-
+    #s_engine = get_engine(s_ins)
+    #s_db = s_engine.schema_object.databases[src_db_name]
+    #s_tb = s_db.tables[src_table_name]
+    #s_charset = s_tb.options['charset'].value
+    #if s_charset is None:
+    #    s_charset = s_db.options['charset'].value
+    s_charset = 'utf8mb4'
+    
     pt_archiver = PtArchiver()
     # 准备参数
     source = fr"h={s_ins.host},u={s_ins.user},p={s_ins.password}," \
@@ -283,8 +284,10 @@ def archive(archive_id):
         "where": condition,
         "progress": 5000,
         "statistics": True,
-        "charset": 'utf8',
+        "charset": 'utf8mb4',
         "limit": 10000,
+        "bulk-insert": True,
+        "bulk-delete": True,
         "txn-size": 1000,
         "sleep": sleep
     }
@@ -295,8 +298,9 @@ def archive(archive_id):
         "where": condition,
         "progress": 10000,
         "statistics": True,
-        "charset": 'utf8',
+        "charset": 'utf8mb4',
         "limit": 100000,
+        "bulk-delete": True,
         "txn-size": 100000,
         "sleep": sleep
     }
@@ -306,12 +310,13 @@ def archive(archive_id):
         dest_db_name = archive_info.dest_db_name
         dest_table_name = archive_info.dest_table_name
         # 目标表的字符集信息
-        d_engine = get_engine(d_ins)
-        d_db = d_engine.schema_object.databases[dest_db_name]
-        d_tb = d_db.tables[dest_table_name]
-        d_charset = d_tb.options['charset'].value
-        if d_charset is None:
-            d_charset = d_db.options['charset'].value
+        #d_engine = get_engine(d_ins)
+        #d_db = d_engine.schema_object.databases[dest_db_name]
+        #d_tb = d_db.tables[dest_table_name]
+        #d_charset = d_tb.options['charset'].value
+        #if d_charset is None:
+        #    d_charset = d_db.options['charset'].value
+        d_charset = 'utf8mb4'
         # dest
         dest = fr"h={d_ins.host},u={d_ins.user},p={d_ins.password},P={d_ins.port}," \
             fr"D={dest_db_name},t={dest_table_name},A={d_charset}"
