@@ -326,7 +326,8 @@ def archive(archive_id):
     elif mode == 'file':
         output_directory = os.path.join(settings.BASE_DIR, 'downloads/archiver')
         os.makedirs(output_directory, exist_ok=True)
-        args_file['file'] = f'{output_directory}/{s_ins.instance_name}-{src_db_name}-{src_table_name}.txt'
+        ts=time.time()
+        args_file['file'] = f'{output_directory}/{s_ins.instance_name}-{src_db_name}-{src_table_name}-{ts}.txt'
         args = args_file
         if no_delete:
             args['no-delete'] = True
